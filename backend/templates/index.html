@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SendNaija - Quick Delivery Quotes</title>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">Send<span>Naija</span></a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Get Transparent Delivery Quotes <br/>in <span>10 Seconds</span></h1>
+            <p>Enter your pickup and dropoff locations. See 3 fixed prices instantly.</p>
+
+            <!-- Quote Request Form -->
+            <div class="quote-card">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pickup">📍 Pickup Location</label>
+                        <input type="text" id="pickup" placeholder="e.g. Computer Village, Ikeja" />
+                    </div>
+                    <div class="form-group">
+                        <label for="dropoff">📌 Dropoff Location</label>
+                        <input type="text" id="dropoff" placeholder="e.g. Lekki Phase 1" />
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: flex-end;">
+                        <button id="findQuotesBtn" class="btn-find-rider">🚀 Find Riders</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loading" style="display: none; color: var(--secondary-blue); font-weight: 600; margin-top: 20px;">
+                ⏳ Searching for available riders...
+            </div>
+
+            <!-- Results: 3 Quote Cards -->
+            <div id="results" style="display: none; margin-top: 30px;">
+                <h3 style="color: var(--text-dark);">Available Riders near you</h3>
+                <div id="quoteGrid" class="quote-grid"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
