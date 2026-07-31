@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SendNaija - Quick Delivery Quotes</title>
+    <title>SendNaija - Delivery Made Easy</title>
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
     <!-- Custom CSS -->
@@ -15,42 +15,95 @@
     <nav class="navbar">
         <div class="container">
             <a href="/" class="logo">Send<span>Naija</span></a>
+            <!-- Tab Navigation -->
+            <div class="nav-tabs">
+                <button class="tab-btn active" data-tab="quotes">📊 Get Quotes</button>
+                <button class="tab-btn" data-tab="post">📦 Post Delivery</button>
+            </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Main Content -->
     <section class="hero">
         <div class="container">
-            <h1>Get Transparent Delivery Quotes <br/>in <span>10 Seconds</span></h1>
-            <p>Enter your pickup and dropoff locations. See 3 fixed prices instantly.</p>
 
-            <!-- Quote Request Form -->
-            <div class="quote-card">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="pickup">📍 Pickup Location</label>
-                        <input type="text" id="pickup" placeholder="e.g. Computer Village, Ikeja" />
+            <!-- ========================================== -->
+            <!-- TAB 1: GET QUOTES (WEEK 1) -->
+            <!-- ========================================== -->
+            <div id="quotes-section" class="tab-content active">
+                <h1>Get Transparent Delivery Quotes <br/>in <span>10 Seconds</span></h1>
+                <p>Enter your pickup and dropoff locations. See 3 fixed prices instantly.</p>
+
+                <!-- Quote Request Form -->
+                <div class="quote-card">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pickup">📍 Pickup Location</label>
+                            <input type="text" id="pickup" placeholder="e.g. Computer Village, Ikeja" />
+                        </div>
+                        <div class="form-group">
+                            <label for="dropoff">📌 Dropoff Location</label>
+                            <input type="text" id="dropoff" placeholder="e.g. Lekki Phase 1" />
+                        </div>
+                        <div class="form-group" style="display: flex; align-items: flex-end;">
+                            <button id="findQuotesBtn" class="btn-find-rider">🚀 Find Riders</button>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="dropoff">📌 Dropoff Location</label>
-                        <input type="text" id="dropoff" placeholder="e.g. Lekki Phase 1" />
-                    </div>
-                    <div class="form-group" style="display: flex; align-items: flex-end;">
-                        <button id="findQuotesBtn" class="btn-find-rider">🚀 Find Riders</button>
-                    </div>
+                </div>
+
+                <!-- Loading -->
+                <div id="loading" style="display: none; color: var(--secondary-blue); font-weight: 600; margin-top: 20px;">
+                    ⏳ Searching for available riders...
+                </div>
+
+                <!-- Results -->
+                <div id="results" style="display: none; margin-top: 30px;">
+                    <h3 style="color: var(--text-dark);">Available Riders near you</h3>
+                    <div id="quoteGrid" class="quote-grid"></div>
                 </div>
             </div>
 
-            <!-- Loading State -->
-            <div id="loading" style="display: none; color: var(--secondary-blue); font-weight: 600; margin-top: 20px;">
-                ⏳ Searching for available riders...
+            <!-- ========================================== -->
+            <!-- TAB 2: POST DELIVERY (WEEK 2) -->
+            <!-- ========================================== -->
+            <div id="post-section" class="tab-content">
+                <h1>Post a Delivery Job <br/>and <span>Broadcast</span> to Riders</h1>
+                <p>Fill in the details. We will notify all nearby riders instantly.</p>
+
+                <div class="quote-card">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="postPickup">📍 Pickup Location</label>
+                            <input type="text" id="postPickup" placeholder="e.g. Computer Village, Ikeja" />
+                        </div>
+                        <div class="form-group">
+                            <label for="postDropoff">📌 Dropoff Location</label>
+                            <input type="text" id="postDropoff" placeholder="e.g. Lekki Phase 1" />
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 16px;">
+                        <div class="form-group">
+                            <label for="postItem">📦 What are you sending?</label>
+                            <input type="text" id="postItem" placeholder="e.g. Phone, Documents, Food" />
+                        </div>
+                        <div class="form-group" style="display: flex; align-items: flex-end;">
+                            <button id="broadcastBtn" class="btn-find-rider" style="background-color: var(--secondary-blue);">📢 Broadcast to Riders</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading -->
+                <div id="broadcastLoading" style="display: none; color: var(--secondary-blue); font-weight: 600; margin-top: 20px;">
+                    ⏳ Notifying nearby riders...
+                </div>
+
+                <!-- Broadcast Results -->
+                <div id="broadcastResults" style="display: none; margin-top: 30px;">
+                    <h3 style="color: var(--text-dark);">✅ Job Posted! Riders are on their way.</h3>
+                    <div id="broadcastGrid" class="quote-grid"></div>
+                </div>
             </div>
 
-            <!-- Results: 3 Quote Cards -->
-            <div id="results" style="display: none; margin-top: 30px;">
-                <h3 style="color: var(--text-dark);">Available Riders near you</h3>
-                <div id="quoteGrid" class="quote-grid"></div>
-            </div>
         </div>
     </section>
 

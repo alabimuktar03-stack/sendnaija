@@ -1,5 +1,9 @@
 from flask import Flask, render_template
-from .config import Config   # <-- This line is fixed
+from .config import Config
+
+# Import your blueprints
+from .routes.orders import orders_bp
+from .routes.jobs import jobs_bp   # <-- NEW
 
 app = Flask(__name__, 
             template_folder='templates',
@@ -8,9 +12,9 @@ app = Flask(__name__,
 
 app.config.from_object(Config)
 
-# Import and register our routes
-from .routes.orders import orders_bp   # <-- ALSO fix this line (add a dot)
+# Register the blueprints
 app.register_blueprint(orders_bp)
+app.register_blueprint(jobs_bp)   # <-- NEW
 
 @app.route('/')
 def index():
