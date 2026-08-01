@@ -270,3 +270,102 @@ body {
         align-items: center;
     }
 }
+
+
+/* ========================================== */
+/* CUSTOM TOAST NOTIFICATION (ANIMATED)      */
+/* ========================================== */
+.toast-alert {
+    position: fixed;
+    top: -100px; /* Start hidden above the screen */
+    left: 50%;
+    transform: translateX(-50%);
+    background: #FFF7ED; /* Warm orange-tinted background */
+    border-left: 6px solid #F97316; /* Orange accent */
+    padding: 16px 28px;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(15, 23, 42, 0.2);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    color: #1E293B;
+    max-width: 90%;
+    min-width: 320px;
+    transition: top 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.4s ease;
+    opacity: 0;
+    pointer-events: none; /* Prevent interaction while hidden */
+}
+
+/* When the toast is visible */
+.toast-alert.show {
+    top: 30px; /* Slides down to this position */
+    opacity: 1;
+    pointer-events: auto; /* Allow clicking the close button */
+}
+
+/* Toast Icon */
+.toast-icon {
+    font-size: 26px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+/* Toast Message */
+.toast-message {
+    flex: 1;
+    font-size: 15px;
+}
+
+/* Close Button */
+.toast-close {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #94A3B8;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+    font-weight: 300;
+    flex-shrink: 0;
+}
+
+.toast-close:hover {
+    background: #F1F5F9;
+    color: #475569;
+}
+
+/* Different Types (Error, Success, Info) */
+.toast-alert.error {
+    background: #FEF2F2;
+    border-left-color: #EF4444; /* Red for errors */
+}
+
+.toast-alert.success {
+    background: #F0FDF4;
+    border-left-color: #22C55E; /* Green for success */
+}
+
+.toast-alert.info {
+    background: #EFF6FF;
+    border-left-color: #0EA5E9; /* Blue for info */
+}
+
+/* RESPONSIVE: Smaller screens */
+@media (max-width: 640px) {
+    .toast-alert {
+        min-width: unset;
+        width: 90%;
+        padding: 14px 18px;
+        top: -120px;
+    }
+    .toast-alert.show {
+        top: 20px;
+    }
+    .toast-message {
+        font-size: 14px;
+    }
+}

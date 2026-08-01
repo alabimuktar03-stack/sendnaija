@@ -1,3 +1,47 @@
+    // ==========================================
+    // TOAST NOTIFICATION SYSTEM
+    // ==========================================
+    function showToast(message, type = 'error') {
+        const toast = document.getElementById('toast-alert');
+        const toastMessage = document.getElementById('toast-message');
+        const toastIcon = document.getElementById('toast-icon');
+
+        // Set the message
+        toastMessage.textContent = message;
+
+        // Remove all existing type classes
+        toast.classList.remove('error', 'success', 'info');
+
+        // Set the icon and class based on type
+        if (type === 'error') {
+            toastIcon.textContent = '⚠️';
+            toast.classList.add('error');
+        } else if (type === 'success') {
+            toastIcon.textContent = '✅';
+            toast.classList.add('success');
+        } else {
+            toastIcon.textContent = 'ℹ️';
+            toast.classList.add('info');
+        }
+
+        // Show the toast with animation
+        toast.classList.add('show');
+
+        // Auto-hide after 3.5 seconds
+        if (window.toastTimeout) clearTimeout(window.toastTimeout);
+        window.toastTimeout = setTimeout(() => {
+            closeToast();
+        }, 3500);
+    }
+
+    function closeToast() {
+        const toast = document.getElementById('toast-alert');
+        toast.classList.remove('show');
+        if (window.toastTimeout) {
+            clearTimeout(window.toastTimeout);
+            window.toastTimeout = null;
+        }
+    }
 document.addEventListener('DOMContentLoaded', function() {
 
     // ==========================================
@@ -37,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const dropoff = dropoffInput.value.trim();
 
         if (!pickup || !dropoff) {
-            alert('Please enter both pickup and dropoff locations.');
+            showToast('Please enter both pickup and dropoff locations.');
             return;
         }
 
@@ -54,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
 
             if (data.error) {
-                alert('Error: ' + data.error);
+                showToast('Error: ' + data.error);
                 loadingDiv.style.display = 'none';
                 return;
             }
@@ -65,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         } catch (error) {
             console.error('Error fetching quotes:', error);
-            alert('Something went wrong. Please try again.');
+            showToast('Something went wrong. Please try again.');
             loadingDiv.style.display = 'none';
         }
     });
@@ -105,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const item = postItem.value.trim() || 'Package';
 
         if (!pickup || !dropoff) {
-            alert('Please enter both pickup and dropoff locations.');
+            showToast('Please enter both pickup and dropoff locations.');
             return;
         }
 
@@ -122,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
 
             if (data.error) {
-                alert('Error: ' + data.error);
+                showToast('Error: ' + data.error);
                 broadcastLoading.style.display = 'none';
                 return;
             }
@@ -133,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         } catch (error) {
             console.error('Error broadcasting job:', error);
-            alert('Something went wrong. Please try again.');
+            showToast('Something went wrong. Please try again.');
             broadcastLoading.style.display = 'none';
         }
     });
