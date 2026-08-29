@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', function () {
+
     // ==========================================
     // TOAST NOTIFICATION SYSTEM
     // ==========================================
@@ -6,13 +8,9 @@
         const toastMessage = document.getElementById('toast-message');
         const toastIcon = document.getElementById('toast-icon');
 
-        // Set the message
         toastMessage.textContent = message;
-
-        // Remove all existing type classes
         toast.classList.remove('error', 'success', 'info');
 
-        // Set the icon and class based on type
         if (type === 'error') {
             toastIcon.textContent = '⚠️';
             toast.classList.add('error');
@@ -24,10 +22,7 @@
             toast.classList.add('info');
         }
 
-        // Show the toast with animation
         toast.classList.add('show');
-
-        // Auto-hide after 3.5 seconds
         if (window.toastTimeout) clearTimeout(window.toastTimeout);
         window.toastTimeout = setTimeout(() => {
             closeToast();
@@ -42,7 +37,6 @@
             window.toastTimeout = null;
         }
     }
-document.addEventListener('DOMContentLoaded', function() {
 
     // ==========================================
     // TAB SWITCHING
@@ -54,12 +48,9 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     tabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-            // Remove active class from all tabs and contents
+        tab.addEventListener('click', function () {
             tabs.forEach(t => t.classList.remove('active'));
             Object.values(contents).forEach(c => c.classList.remove('active'));
-
-            // Add active class to clicked tab and corresponding content
             this.classList.add('active');
             const tabId = this.dataset.tab;
             contents[tabId].classList.add('active');
@@ -76,12 +67,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultsDiv = document.getElementById('results');
     const quoteGrid = document.getElementById('quoteGrid');
 
-    findBtn.addEventListener('click', async function() {
+    findBtn.addEventListener('click', async function () {
         const pickup = pickupInput.value.trim();
         const dropoff = dropoffInput.value.trim();
 
         if (!pickup || !dropoff) {
-            showToast('Please enter both pickup and dropoff locations.');
+            showToast('Please enter both pickup and dropoff locations.', 'error');
             return;
         }
 
@@ -98,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
 
             if (data.error) {
-                showToast('Error: ' + data.error);
+                showToast('Error: ' + data.error, 'error');
                 loadingDiv.style.display = 'none';
                 return;
             }
@@ -109,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         } catch (error) {
             console.error('Error fetching quotes:', error);
-            showToast('Something went wrong. Please try again.');
+            showToast('Something went wrong. Please try again.', 'error');
             loadingDiv.style.display = 'none';
         }
     });
@@ -127,8 +118,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="rating">⭐ ${rider.rating}</div>
                 <div class="price">₦${rider.price.toLocaleString()} <span>flat fee</span></div>
                 <div class="eta">⏱️ ${rider.estimated_time}</div>
+                <div style="font-size: 12px; color: #94A3B8; margin-top: 4px;">📏 ${rider.distance}</div> <!-- NEW: Show distance -->
+                <button class="btn-book" data-rider='${JSON.stringify(rider)}' style="margin-top: 12px; background: var(--accent-orange); color: white; border: none; padding: 10px 20px; border-radius: 30px; font-weight: 600; cursor: pointer; width: 100%;">
+                    📱 Book Now
+                </button>
             `;
             quoteGrid.appendChild(card);
+        });
+
+        document.querySelectorAll('.btn-book').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const rider = JSON.parse(this.dataset.rider);
+                handleBooking(rider);
+            });
         });
     }
 
@@ -143,13 +145,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const broadcastResults = document.getElementById('broadcastResults');
     const broadcastGrid = document.getElementById('broadcastGrid');
 
-    broadcastBtn.addEventListener('click', async function() {
+    broadcastBtn.addEventListener('click', async function () {
         const pickup = postPickup.value.trim();
         const dropoff = postDropoff.value.trim();
         const item = postItem.value.trim() || 'Package';
 
         if (!pickup || !dropoff) {
-            showToast('Please enter both pickup and dropoff locations.');
+            showToast('Please enter both pickup and dropoff locations.', 'error');
             return;
         }
 
@@ -166,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
 
             if (data.error) {
-                showToast('Error: ' + data.error);
+                showToast('Error: ' + data.error, 'error');
                 broadcastLoading.style.display = 'none';
                 return;
             }
@@ -177,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         } catch (error) {
             console.error('Error broadcasting job:', error);
-            showToast('Something went wrong. Please try again.');
+            showToast('Something went wrong. Please try again.', 'error');
             broadcastLoading.style.display = 'none';
         }
     });
@@ -187,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
         riders.forEach(rider => {
             const card = document.createElement('div');
             card.className = 'quote-card-item';
-            card.style.borderLeftColor = '#22C55E'; // Green for accepted
+            card.style.borderLeftColor = '#22C55E';
             card.innerHTML = `
                 <div class="rider-name">${rider.name}</div>
                 <div class="vehicle">${rider.vehicle}</div>
@@ -200,7 +202,6 @@ document.addEventListener('DOMContentLoaded', function() {
             broadcastGrid.appendChild(card);
         });
 
-        // Add a small note about the job ID
         const note = document.createElement('p');
         note.style.marginTop = '20px';
         note.style.color = '#64748B';
@@ -208,5 +209,83 @@ document.addEventListener('DOMContentLoaded', function() {
         note.textContent = `📋 Job #${jobId} broadcasted successfully. ${riders.length} rider(s) assigned.`;
         broadcastGrid.appendChild(note);
     }
+
+    // ==========================================
+    // WEEK 3: BOOKING LOGIC (PROFESSIONAL MODAL)
+    // ==========================================
+    let currentBookingRider = null;
+
+    async function handleBooking(rider) {
+        const pickup = document.getElementById('pickup').value.trim();
+        const dropoff = document.getElementById('dropoff').value.trim();
+
+        if (!pickup || !dropoff) {
+            showToast('Please enter pickup and dropoff locations first.', 'error');
+            return;
+        }
+
+        currentBookingRider = {
+            ...rider,
+            pickup: pickup,
+            dropoff: dropoff
+        };
+
+        document.getElementById('modalRiderName').textContent = rider.rider_name;
+        document.getElementById('modalRiderVehicle').textContent = rider.vehicle;
+        document.getElementById('modalRiderRating').textContent = '⭐ ' + rider.rating;
+        document.getElementById('modalPrice').textContent = '₦' + rider.price.toLocaleString();
+        document.getElementById('modalPickup').textContent = pickup;
+        document.getElementById('modalDropoff').textContent = dropoff;
+        document.getElementById('modalEta').textContent = '⏱️ Estimated arrival: ' + rider.estimated_time;
+
+        document.getElementById('bookingModal').classList.add('show');
+    }
+
+    function closeBookingModal() {
+        document.getElementById('bookingModal').classList.remove('show');
+        currentBookingRider = null;
+    }
+
+    document.addEventListener('click', async function (e) {
+        if (e.target.id === 'modalConfirmBtn') {
+            if (!currentBookingRider) return;
+
+            const rider = currentBookingRider;
+
+            try {
+                const response = await fetch('/api/book', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        rider_id: rider.rider_id,
+                        rider_name: rider.rider_name,
+                        pickup: rider.pickup,
+                        dropoff: rider.dropoff,
+                        price: rider.price,
+                        estimated_time: rider.estimated_time
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.status === 201) {
+                    showToast(`✅ ${rider.rider_name} is confirmed! They will arrive in ${rider.estimated_time}.`, 'success');
+                    closeBookingModal();
+                } else {
+                    showToast('Error: ' + data.error, 'error');
+                }
+            } catch (error) {
+                console.error('Booking error:', error);
+                showToast('Something went wrong. Please try again.', 'error');
+            }
+        }
+    });
+
+    document.addEventListener('click', function (e) {
+        const modal = document.getElementById('bookingModal');
+        if (e.target === modal) {
+            closeBookingModal();
+        }
+    });
 
 });

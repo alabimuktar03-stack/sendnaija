@@ -118,6 +118,55 @@
         <button class="toast-close" onclick="closeToast()">✕</button>
     </div>
 
+        <!-- ========================================== -->
+    <!-- BOOKING CONFIRMATION MODAL (PROFESSIONAL) -->
+    <!-- ========================================== -->
+    <div id="bookingModal" class="booking-modal">
+        <div class="booking-modal-content">
+            <!-- Close button -->
+            <button class="modal-close" onclick="closeBookingModal()">✕</button>
+            
+            <!-- Icon -->
+            <div class="modal-icon">🚀</div>
+            
+            <!-- Title -->
+            <h2 class="modal-title">Confirm Booking</h2>
+            
+            <!-- Rider Details -->
+            <div class="modal-rider-details">
+                <div class="modal-rider-name" id="modalRiderName">Rider Name</div>
+                <div class="modal-rider-vehicle" id="modalRiderVehicle">Vehicle</div>
+                <div class="modal-rider-rating" id="modalRiderRating">⭐ 4.5</div>
+            </div>
+            
+            <!-- Price -->
+            <div class="modal-price" id="modalPrice">₦0</div>
+            
+            <!-- Location Details -->
+            <div class="modal-location-details">
+                <div class="modal-location-row">
+                    <span class="modal-location-icon">📍</span>
+                    <span class="modal-location-text" id="modalPickup">Pickup location</span>
+                </div>
+                <div class="modal-location-row">
+                    <span class="modal-location-icon">📌</span>
+                    <span class="modal-location-text" id="modalDropoff">Dropoff location</span>
+                </div>
+            </div>
+            
+            <!-- ETA -->
+            <div class="modal-eta" id="modalEta">⏱️ Estimated arrival: 25 mins</div>
+            
+            <!-- Action Buttons -->
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" onclick="closeBookingModal()">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" id="modalConfirmBtn">✅ Confirm Booking</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
 </body>
 </html>
 </body>
