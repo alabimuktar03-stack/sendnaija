@@ -216,13 +216,18 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentBookingRider = null;
 
     async function handleBooking(rider) {
-        const pickup = document.getElementById('pickup').value.trim();
-        const dropoff = document.getElementById('dropoff').value.trim();
+    const pickup = document.getElementById('pickup').value.trim();
+    const dropoff = document.getElementById('dropoff').value.trim();
 
-        if (!pickup || !dropoff) {
-            showToast('Please enter pickup and dropoff locations first.', 'error');
-            return;
-        }
+    if (!pickup || !dropoff) {
+        showToast('📍 Please enter both pickup and dropoff locations.', 'error');
+        return;
+    }
+
+    if (pickup.length < 3 || dropoff.length < 3) {
+        showToast('📍 Please enter valid location names (at least 3 characters).', 'error');
+        return;
+    }
 
         currentBookingRider = {
             ...rider,
@@ -289,3 +294,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+// Make functions globally accessible for inline onclick handlers
+window.closeToast = closeToast;
+window.closeBookingModal = closeBookingModal;
